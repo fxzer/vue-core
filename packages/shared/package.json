@@ -30,6 +30,7 @@
     "index.js"
   ],
   "buildOptions": {
+    "name": "VueShared",
     "formats": [
       "esm-bundler",
       "cjs"
