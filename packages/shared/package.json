@@ -1,0 +1,38 @@
+{
+  "name": "@vue/shared",
+  "version": "3.4.30",
+  "description": "internal utils shared across @vue packages",
+  "author": "Evan You",
+  "license": "MIT",
+  "keywords": [
+    "vue"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/shared.d.ts",
+      "node": {
+        "production": "./dist/shared.cjs.prod.js",
+        "development": "./dist/shared.cjs.js",
+        "default": "./index.js"
+      },
+      "module": "./dist/shared.esm-bundler.js",
+      "import": "./dist/shared.esm-bundler.js",
+      "require": "./index.js"
+    },
+    "./*": "./*"
+  },
+  "main": "index.js",
+  "module": "dist/shared.esm-bundler.js",
+  "types": "dist/shared.d.ts",
+  "files": [
+    "dist",
+    "index.js"
+  ],
+  "buildOptions": {
+    "formats": [
+      "esm-bundler",
+      "cjs"
+    ]
+  }
+}
