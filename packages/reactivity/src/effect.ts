@@ -1,4 +1,6 @@
-let activeEffect
+// eslint-disable-next-line import/no-mutable-exports
+export let activeEffect
+export let lastEffect
 export function effect(fn, options = {}) {
   // 创建 响应式 effect，数据变化时，重新执行 effect 函数
   const _effect = new ReactiveEffect(fn, () => { // 调度函数
@@ -16,13 +18,14 @@ class ReactiveEffect {
     if (!this.active) { // 是激活的则执行一次
       return this.fn()
     }
+    lastEffect = activeEffect // 记录上一次的 effect
     try {
       // eslint-disable-next-line ts/no-this-alias
       activeEffect = this
       return this.fn()
     }
     finally {
-      activeEffect = undefined
+      activeEffect = lastEffect // 恢复上一次的 effect
     }
   }
 }
