@@ -1,5 +1,5 @@
-import { it, expect, describe } from 'vitest'
-import { reactive,isReactive } from '../src'
+import { describe, expect, it } from 'vitest'
+import { isReactive, reactive } from '../src'
 
 describe('reactive', () => {
   it('应该被定义', () => {
@@ -12,7 +12,6 @@ describe('reactive', () => {
       age: 18,
     })
 
-    
     expect(obj).toBeInstanceOf(Object)
     expect(isReactive(obj)).toBeTruthy()
   })
@@ -22,7 +21,7 @@ describe('reactive', () => {
       name: 'zhangsan',
       age: 18,
     })
-    
+
     const obj2 = reactive(obj1)
     expect(obj1).toBe(obj2)
   })

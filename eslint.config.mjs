@@ -7,5 +7,5 @@ export default antfu(
     rules: {
       'no-console': 'warn',
     },
-    })
-s
+  },
+)
