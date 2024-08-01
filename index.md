@@ -6,6 +6,10 @@ ni -w xxx
 
 # 为指定包安装本地依赖
 
+源仓库 vue
+本仓库 vue-core
+
 ```zsh
-ni @vue/shared --workspace --filter @vue/reactivity
+# shared 包 安装到 reactivity 包中
+ni @vue-core/shared --workspace --filter @vue-core/reactivity
 ```

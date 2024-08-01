@@ -1,5 +1,5 @@
 {
-  "name": "@vue/reactivity",
+  "name": "@vue-core/reactivity",
   "version": "1.0.0",
   "description": "",
   "author": "",
@@ -41,6 +41,6 @@
     ]
   },
   "dependencies": {
-    "@vue/shared": "workspace:^"
+    "@vue-core/shared": "workspace:^"
   }
 }

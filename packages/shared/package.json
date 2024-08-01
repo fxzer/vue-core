@@ -1,5 +1,5 @@
 {
-  "name": "@vue/shared",
+  "name": "@vue-core/shared",
   "version": "3.4.30",
   "description": "internal utils shared across @vue packages",
   "author": "Evan You",
