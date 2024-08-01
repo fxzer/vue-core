@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { isReactive, reactive } from '../src'
 
-describe('reactive', () => {
-  it('应该被定义', () => {
+describe('reactivity/reactive', () => {
+  it('reactive 应该被定义且是函数', () => {
     expect(reactive).toBeDefined()
+    expect(reactive).toBeTypeOf('function')
   })
 
   it('应该是一个 reactive 代理对象', () => {
