@@ -38,7 +38,12 @@ export function effect(fn, options = {}) {
   const _effect = new ReactiveEffect(fn, () => { // 调度函数
     _effect.run()
   })
+  if (options) {
+    Object.assign(_effect, options)
+  }
   _effect.run() // 首次执行
+  const runner = _effect.run.bind(_effect)
+  return runner // 外部可以调用 runner() 控制更新
 }
 
 function cleanDepEffect(dep) {
