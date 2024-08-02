@@ -1,5 +1,5 @@
 import { createDep } from './dep'
-import { activeEffect } from './effect'
+import { activeEffect, trackEffect, triggerEffect } from './effect'
 /*
 被代理对象-->键--> 副作用函数Map
 targetMap = {
@@ -59,4 +59,3 @@ export function trigger(target, key, newValue, oldValue) {
     triggerEffect(dep)
   }
 }
-
