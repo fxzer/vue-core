@@ -6,6 +6,7 @@ export class ReactiveEffect {
   public _trackId = 0 // 副作用执行的次数
   public deps = [] // 副作用上记忆依赖
   public _depLength = 0
+  public _runnings = 0
   constructor(public fn, public scheduler) {
   }
 
@@ -20,10 +21,12 @@ export class ReactiveEffect {
 
       // 每次 effect 执行前，清空上一次的依赖
       preCleanEffect(this)
+      this._runnings++
       return this.fn()
     }
     finally {
       activeEffect = lastEffect // 恢复上一次的 effect
+      this._runnings--
       postCleanEffect(this)
     }
   }
@@ -43,6 +46,7 @@ export function effect(fn, options = {}) {
   }
   _effect.run() // 首次执行
   const runner = _effect.run.bind(_effect)
+  runner.effect = _effect
   return runner // 外部可以调用 runner() 控制更新
 }
 
@@ -67,8 +71,10 @@ function postCleanEffect(effect) {
 }
 export function triggerEffect(dep) {
   for (const effect of dep.keys()) {
-    if (effect.scheduler) {
-      effect.scheduler()
+    if (effect._runnings === 0) { // 防止同一个 effect 触发更新造成栈溢出
+      if (effect.scheduler) {
+        effect.scheduler()
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { activeEffect, effect } from '../src'
+import { activeEffect, effect, reactive } from '../src'
 
 describe('reactivity/effect', () => {
   it('effect 应该被定义且是函数', () => {
@@ -13,10 +13,10 @@ describe('reactivity/effect', () => {
   })
 
   it('新effect 执行前销毁（effect 外部再次改依赖时，不再执行副作用函数）', () => {
-    // const counter = reactive({ num: 0 })
+    const counter = reactive({ num: 0 })
     expect(activeEffect).toBeUndefined()
     effect(() => {
-      // counter.num++
+      counter.num++
       expect(activeEffect).toBeDefined()
     })
     expect(activeEffect).toBeUndefined()
