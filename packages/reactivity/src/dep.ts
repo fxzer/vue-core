@@ -5,7 +5,7 @@ export type Dep = Map<ReactiveEffect, number> & {
   cleanup: () => void
 }
 
-export function createDep(cleanup: () => void,key) {
+export function createDep(cleanup: () => void, key) {
   const dep = new Map() as Dep
   dep.cleanup = cleanup
   dep.name = key

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h1>reactivity</h1>
+      <div id="app"></div>
+    </div>
+    <script type="module">
+      // import { reactive,effect } from '/node_modules/vue/dist/vue.esm-browser.js'
+      import { reactive, effect, ref } from '../dist/reactivity.js'
+      const state = reactive({
+        name: 'zhangsan',
+        age: 18,
+        flag: true,
+        address: {
+          home: '北京',
+        },
+      })
+      const app = document.getElementById('app')
+      // 测试 1
+
+      //   effect(()=>{
+      //     app.innerHTML = `姓名：${state.name}，年龄：${state.age}`
+      //     setTimeout(() => {
+      //       state.age = 20 //TypeError: 'set' on proxy: trap returned falsish for property 'age'
+      //       state.name = 'lisi'
+      //  }, 1000);
+      //   })
+
+      // effect(()=>{
+      //   state.age++  // 栈溢出
+      // })
+      /*
+  setTimeout(() => {
+    state.age++
+   }, 2000);
+   // 测试2 : 代理非对象
+   const num = reactive(1)
+
+   // 测试3 : 传入代理对象
+   const pre = reactive({
+    a:1,
+    b:2
+  })
+  const cur = reactive(pre)
+
+    // 测试 4 带条件
+   /*  let runner = effect(()=>{
+      // app.innerHTML = state.flag + state.flag + state.flag // 解决重复收集
+      // app.innerHTML = state.flag ? state.name : state.age
+      app.innerHTML = state.address.home
+      // state.name  = Math.random()// 防止递归调用，本次 effect 不执行更新操作
+    },{
+      scheduler:() => {
+        runner() // 执行 effect
+      }
+    })
+
+    // 测试 5： 深度代理
+    effect(()=>{
+     setTimeout(() => {
+      state.address.home = '上海'
+     }, 1000);
+      // app.innerHTML = state.flag  // 解决重复收集
+      // app.innerHTML = state.flag ? state.name : state.age
+    }) */
+      //   effect(()=>{
+      //     setTimeout(() => {
+      //       state.flag = false // 清空 deps 中的第 0 个 effect
+      //       setTimeout(() => {
+      //         state.name = 'lisi' // 不应该触发 name 的 effect
+      //         runner()
+      //       }, 10);
+      //  }, 1000);
+      //   })
+
+      // ref
+      const name = ref('zhangsan')
+      const obj = ref({
+        name: 'zhangsan',
+        age: 18,
+      })
+      effect(() => {
+        app.innerHTML = obj.value.name
+      })
+      effect(() => {
+        setTimeout(() => {
+          app.innerHTML = obj.value.name + '123'
+        }, 1000)
+      })
+    </script>
+  </body>
+</html>

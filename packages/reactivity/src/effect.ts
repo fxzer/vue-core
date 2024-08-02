@@ -64,7 +64,7 @@ function preCleanEffect(effect) {
 function postCleanEffect(effect) {
   if (effect.deps.length > effect._depLength) {
     for (let i = effect._depLength; i < effect.deps.length; i++) {
-      cleanDepEffect(effect.deps[i], effect)
+      cleanDepEffect(effect.deps[i])
     }
     effect.deps.length = effect._depLength
   }

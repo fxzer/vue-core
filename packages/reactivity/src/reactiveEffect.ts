@@ -49,7 +49,7 @@ export function track(target, key) {
   }
 }
 // 触发依赖更新
-export function trigger(target, key, newValue, oldValue) {
+export function trigger(target, key) {
   const depsMap = targetMap.get(target)
   if (!depsMap) { // 找不到对象
     return

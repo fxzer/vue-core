@@ -4,6 +4,9 @@ import { ReactiveFlags, mutableHandlers } from './baseHandler'
 export function isReactive(value) {
   return value[ReactiveFlags.IS_REACTIVE]
 }
+export function toReactive(value) {
+  return isObject(value) ? reactive(value) : value
+}
 export function reactive(target) {
   return createReactiveObject(target)
 }
