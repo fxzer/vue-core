@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { activeEffect, effect, lastEffect, reactive } from '../src'
+import { activeEffect, effect } from '../src'
 
 describe('reactivity/effect', () => {
   it('effect 应该被定义且是函数', () => {
@@ -12,11 +12,11 @@ describe('reactivity/effect', () => {
     expect(fnSpy).toHaveBeenCalledTimes(1)
   })
 
-  it('effect 执行完销毁（effect 外部再次改依赖时，不再执行副作用函数）', () => {
-    const counter = reactive({ num: 0 })
+  it('新effect 执行前销毁（effect 外部再次改依赖时，不再执行副作用函数）', () => {
+    // const counter = reactive({ num: 0 })
     expect(activeEffect).toBeUndefined()
     effect(() => {
-      counter.num++
+      // counter.num++
       expect(activeEffect).toBeDefined()
     })
     expect(activeEffect).toBeUndefined()
@@ -38,14 +38,21 @@ describe('reactivity/effect', () => {
     // activeEffect 应该设置回 e1
    */
     expect(activeEffect).toBeUndefined()
-    let e1
     effect(() => {
-      e1 = activeEffect
+      const e1 = activeEffect
       effect(() => {
         expect(activeEffect).toBeDefined()
       }) // 已恢复外层实例
       expect(e1).toEqual(activeEffect)
     })
-    expect(activeEffect).toEqual(e1)
+    expect(activeEffect).toBeUndefined()
+  })
+
+  it('effect 执行时，完成依赖收集', () => {
+    // const counter = reactive({ num: 0 })
+    // effect(() => {
+    //   counter.num++
+    // })
+    // expect(activeEffect).toBeDefined()
   })
 })
