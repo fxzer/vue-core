@@ -49,10 +49,25 @@ describe('reactivity/effect', () => {
   })
 
   it('effect 执行时，完成依赖收集', () => {
-    // const counter = reactive({ num: 0 })
-    // effect(() => {
-    //   counter.num++
-    // })
-    // expect(activeEffect).toBeDefined()
+    const counter = reactive({ num: 0 })
+    let num = 0
+    effect(() => {
+      num = counter.num
+    })
+    expect(num).toBe(0)
+  })
+  // 深度代理
+  it('effect 执行时，完成深度依赖收集', () => {
+    const counter = reactive({
+      num: 0,
+      obj: {
+        num: 0,
+      },
+    })
+    let num = 0
+    effect(() => {
+      num = counter.obj.num
+    })
+    expect(num).toBe(0)
   })
 })
