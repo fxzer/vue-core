@@ -89,9 +89,40 @@ const shallowUnwrapHandlers = {
   },
 }
 
-/** 返回一个代理对象 */ 
+/** 返回一个代理对象 */
 export function proxyRefs(objectWithRefs) {
   return isReactive(objectWithRefs)
     ? objectWithRefs
     : new Proxy(objectWithRefs, shallowUnwrapHandlers)
+}
+
+export function customRef(factory) {
+  return new CustomRefImpl(factory)
+}
+
+class CustomRefImpl {
+  public dep
+  public _v_isRef = true
+
+  public readonly _get
+  public readonly _set
+  constructor(public factory) {
+    const { get, set } = factory(() => {
+      if (this.dep)
+        triggerEffect(this.dep)
+    }, () => {
+      if (this.dep)
+        triggerEffect(this.dep)
+    })
+    this._get = get
+    this._set = set
+  }
+
+  get value() {
+    return this._get()
+  }
+
+  set value(newVal) {
+    this._set(newVal)
+  }
 }
