@@ -1,4 +1,4 @@
-import { isArray, isFunction, isMap, isObject, isPlainObject, isSet } from '@vue/shared'
+import { isArray, isFunction, isMap, isObject } from '@vue/shared'
 import { isReactive } from 'vue'
 import { isRef } from './ref'
 import { ReactiveEffect } from './effect'
@@ -84,4 +84,9 @@ function doWatch(source, cb, {
   else { // watchEffect
     effect.run()
   }
+
+  const unwatch = () => {
+    effect.stop()
+  }
+  return unwatch
 }

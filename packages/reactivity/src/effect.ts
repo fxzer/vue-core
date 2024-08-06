@@ -44,7 +44,12 @@ export class ReactiveEffect {
   }
 
   stop() {
-    this.active = false // 停止收集依赖
+    if (this.active) {
+      this.active = false
+      // 清理 effect 实例上记忆的依赖
+      postCleanEffect(this)
+      postCleanEffect(this)
+    }
   }
 }
 
