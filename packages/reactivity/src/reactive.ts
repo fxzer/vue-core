@@ -1,5 +1,6 @@
 import { isObject } from '@vue/shared'
-import { ReactiveFlags, mutableHandlers } from './baseHandler'
+import { ReactiveFlags } from './constants'
+import { mutableHandlers } from './baseHandler'
 
 export function isReactive(value) {
   return value[ReactiveFlags.IS_REACTIVE]

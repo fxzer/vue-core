@@ -10,6 +10,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node scripts/dev.js reactivity -f esm",
+    "dev:shared": "node scripts/dev.js shared -f esm",
     "test": "vitest",
     "lint": "eslint .",
     "lintf": "eslint --fix ."

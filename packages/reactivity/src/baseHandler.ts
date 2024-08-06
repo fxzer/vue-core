@@ -1,10 +1,7 @@
 import { isObject } from '@vue/shared'
 import { track, trigger } from './reactiveEffect'
 import { reactive } from './reactive'
-
-export enum ReactiveFlags {
-  IS_REACTIVE = '__v_isReactive',
-}
+import { ReactiveFlags } from './constants'
 
 export const mutableHandlers = {
   // receiver 是 Proxy 对象
@@ -25,7 +22,7 @@ export const mutableHandlers = {
 
     // 修改前后值不相等，则触发依赖更新页面
     if (result && oldValue !== value) {
-      trigger(target, key, value, oldValue)
+      trigger(target, key)
     }
     return result
   },

@@ -1,3 +1,5 @@
+import { DirtyFlags } from './constants'
+
 // eslint-disable-next-line import/no-mutable-exports
 export let activeEffect
 
@@ -7,10 +9,20 @@ export class ReactiveEffect {
   public deps = [] // 副作用上记忆依赖
   public _depLength = 0
   public _runnings = 0
+  public _dirtyLevel = DirtyFlags.IS_DIRTY // 副作用执行时，依赖的响应式数据是否变化 0：未变化，4：变化
   constructor(public fn, public scheduler) {
   }
 
+  public get dirty() {
+    return this._dirtyLevel
+  }
+
+  public set dirty(dirty: 0 | 4) {
+    this._dirtyLevel = dirty
+  }
+
   run() {
+    this._dirtyLevel = DirtyFlags.NO_DITY // 每次 effect 执行前，重置为未变化
     if (!this.active) { // 只执行一次， effectScope.stop() 停止收集依赖
       return this.fn()
     }
@@ -71,6 +83,9 @@ function postCleanEffect(effect) {
 }
 export function triggerEffect(dep) {
   for (const effect of dep.keys()) {
+    if (effect._dirtyLevel === DirtyFlags.NO_DITY) {
+      effect._dirtyLevel = DirtyFlags.IS_DIRTY
+    }
     if (effect._runnings === 0) { // 防止同一个 effect 触发更新造成栈溢出
       if (effect.scheduler) {
         effect.scheduler()
