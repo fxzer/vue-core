@@ -14,9 +14,15 @@
       // import {
       //   reactive,
       //   effect,
-      //   watch,
+      //   watch,watchEffect
       // } from '/node_modules/vue/dist/vue.esm-browser.js'
-      import { reactive, effect, ref, watch } from '../dist/reactivity.js'
+      import {
+        reactive,
+        effect,
+        ref,
+        watch,
+        watchEffect,
+      } from '../dist/reactivity.js'
       const state = reactive({
         name: 'zhangsan',
         age: 18,
@@ -27,17 +33,17 @@
         },
       })
       const app = document.getElementById('app')
-      watch(
-        () => state.name,
-        (newValue, oldValue) => {
-          // 对象类型，oldValue和newValue都是同一个对象
-          console.log('[ newValue, oldValue ]-31', newValue, oldValue)
-        },
-        {
-          // deep: false,
-          immediate: true,
-        },
-      )
+      // watch(
+      //   () => state.name,
+      //   (newValue, oldValue) => {
+      //     // 对象类型，oldValue和newValue都是同一个对象
+      //     console.log('[ newValue, oldValue ]-31', newValue, oldValue)
+      //   },
+      //   {
+      //     // deep: false,
+      //     immediate: true,
+      //   },
+      // )
       // watch(state, (newValue, oldValue) => {
       //   // 对象类型，oldValue和newValue都是同一个对象
       //   console.log('[ newValue, oldValue ]-31', newValue, oldValue)
@@ -46,6 +52,8 @@
         app.innerHTML = JSON.stringify(state)
       })
       // 依赖变化
+
+      watchEffect(() => console.log('[ state.name ]-55', state.name, state.age))
       setTimeout(() => {
         state.name = 'lisi'
         // state.address.city = ''

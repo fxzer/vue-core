@@ -3,13 +3,11 @@ import { isReactive } from 'vue'
 import { isRef } from './ref'
 import { ReactiveEffect } from './effect'
 
-export function watchEffect(effect) {
-  const runner = effect
-  runner()
-}
-
 export function watch(source, cb, options = {}) {
   return doWatch(source, cb, options)
+}
+export function watchEffect(source, options = {}) {
+  return doWatch(source, null, options)
 }
 
 // 根据 是否 deep 判断是否需要递归遍历
@@ -61,15 +59,20 @@ function doWatch(source, cb, {
     if (!effect.active || !effect.dirty) {
       return
     }
-    const newValue = effect.run()
-    if (cb)
+    if (cb) {
+      const newValue = effect.run()
       cb(newValue, oldValue)
-    oldValue = newValue
+      oldValue = newValue
+    }
+    else {
+      effect.run() // watchEffect
+    }
   }
 
   if (!getter)
     return
   effect = new ReactiveEffect(getter, job)
+
   if (cb) {
     if (immediate) {
       job()
@@ -78,7 +81,7 @@ function doWatch(source, cb, {
       oldValue = effect.run()
     }
   }
-  else {
-    console.warn('[watch]: watch callback is required')
+  else { // watchEffect
+    effect.run()
   }
 }
