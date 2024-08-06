@@ -33,7 +33,6 @@ export class ComputedRefImpl {
   }
 
   set value(newValue) {
-    console.log('[ newValue ]-36', newValue)
     this.setter(newValue)
   }
 }
