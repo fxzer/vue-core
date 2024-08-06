@@ -55,13 +55,25 @@ function doWatch(source, cb, {
   let oldValue
   let effect
 
+  let clean
+  function onCleanup(fn) {
+    clean = () => {
+      fn()
+      clean = null
+    }
+  }
+
   function job() {
     if (!effect.active || !effect.dirty) {
       return
     }
     if (cb) {
+      // 在执行回调之前，先执行清理函数，清理上一次
+      if (clean) {
+        clean()
+      }
       const newValue = effect.run()
-      cb(newValue, oldValue)
+      cb(newValue, oldValue, onCleanup)
       oldValue = newValue
     }
     else {

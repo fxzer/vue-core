@@ -14,7 +14,8 @@
       // import {
       //   reactive,
       //   effect,
-      //   watch,watchEffect
+      //   watch,
+      //   watchEffect,
       // } from '/node_modules/vue/dist/vue.esm-browser.js'
       import {
         reactive,
@@ -33,17 +34,17 @@
         },
       })
       const app = document.getElementById('app')
-      const stopWatch = watch(
-        () => state.name,
-        (newValue, oldValue) => {
-          // 对象类型，oldValue和newValue都是同一个对象
-          console.log('[ newValue, oldValue ]-31', newValue, oldValue)
-        },
-        {
-          // deep: false,
-          immediate: true,
-        },
-      )
+      // const stopWatch = watch(
+      //   () => state.name,
+      //   (newValue, oldValue) => {
+      //     // 对象类型，oldValue和newValue都是同一个对象
+      //     console.log('[ newValue, oldValue ]-31', newValue, oldValue)
+      //   },
+      //   {
+      //     // deep: false,
+      //     immediate: true,
+      //   },
+      // )
       // watch(state, (newValue, oldValue) => {
       //   // 对象类型，oldValue和newValue都是同一个对象
       //   console.log('[ newValue, oldValue ]-31', newValue, oldValue)
@@ -53,14 +54,75 @@
       })
       // 依赖变化
 
-      const stopWatchEffect = watchEffect(() =>
-        console.log('[ state.name ]-55', state.name, state.age),
+      // const stopWatchEffect = watchEffect(() =>
+      //   console.log('[ state.name ]-55', state.name, state.age),
+      // )
+      // stopWatch()
+      // stopWatchEffect()
+
+      // 异步多次触发watch，先后顺序处理，应该应用先返回的值
+      /*       let timer = 3000
+      let queue = []
+      async function getData(timer) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve('ok:' + timer)
+          }, timer)
+        })
+      }
+      watch(
+        () => state.name,
+        async (newValue, oldValue) => {
+          timer -= 1000
+          let flag = true
+          for (let i = 0, len = queue.length; i < len; i++) {
+            queue[i]()
+          }
+          queue.push(() => (flag = false))
+          let r = await getData(timer)
+          if (flag) console.log('[ r  ]-77', r)
+        },
+        {
+          // deep: false,
+          // immediate: true,
+        },
       )
-      stopWatch()
-      stopWatchEffect()
       setTimeout(() => {
         state.name = 'lisi'
+        state.name = 'wangwu'
         // state.address.city = ''
+      }, 1000) */
+      let timer = 3000
+      async function getData(timer) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve('ok:' + timer)
+          }, timer)
+        })
+      }
+      watch(
+        () => state.name,
+        async (newValue, oldValue, onCleanup) => {
+          console.log('[ newValue ]-105', newValue)
+          timer -= 1000
+          let flag = true
+          onCleanup(() => {
+            flag = false
+            console.log('[ flag ]-111', flag)
+          })
+          let r = await getData(timer)
+          if (flag) console.log('[ r  ]-77', r)
+        },
+        {
+          // deep: false,
+          // immediate: true,
+        },
+      )
+      setTimeout(() => {
+        state.name = 'lisi'
+      }, 100)
+      setTimeout(() => {
+        state.name = 'wangwu'
       }, 1000)
     </script>
   </body>
