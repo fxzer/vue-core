@@ -1,4 +1,5 @@
 import { isArray, isFunction, isMap, isObject, isPlainObject, isSet } from '@vue/shared'
+import { isReactive } from 'vue'
 import { isRef } from './ref'
 import { ReactiveEffect } from './effect'
 
@@ -11,6 +12,7 @@ export function watch(source, cb, options = {}) {
   return doWatch(source, cb, options)
 }
 
+// 根据 是否 deep 判断是否需要递归遍历
 function traverse(source, depth, currentDepth = 0, seen: Set<unknown> = new Set()) {
   if (!isObject(source))
     return source
@@ -37,12 +39,25 @@ function doWatch(source, cb, {
   deep = true,
   immediate = false,
 }) {
-  const refactiveGetter = isFunction(source) ? source : source => traverse(source, deep === false ? 1 : undefined)
+  const refactiveGetter = source => traverse(source, deep === false ? 1 : undefined)
 
-  const getter = () => refactiveGetter(source)
+  let getter
+  if (isFunction(source)) {
+    getter = source
+  }
+  else if (isRef(source)) {
+    getter = () => source.value
+  }
+  else if (isReactive(source)) {
+    getter = () => refactiveGetter(source)
+  }
+  else {
+    console.warn('[watch]: watch source should be a function, ref, or reactive object')
+  }
   let oldValue
   let effect
-  const job = () => {
+
+  function job() {
     if (!effect.active || !effect.dirty) {
       return
     }
@@ -51,12 +66,19 @@ function doWatch(source, cb, {
       cb(newValue, oldValue)
     oldValue = newValue
   }
+
+  if (!getter)
+    return
   effect = new ReactiveEffect(getter, job)
-  if (immediate) {
-    job()
+  if (cb) {
+    if (immediate) {
+      job()
+    }
+    else {
+      oldValue = effect.run()
+    }
   }
   else {
-    oldValue = effect.run()
+    console.warn('[watch]: watch callback is required')
   }
 }
-// 根据 是否 deep 判断是否需要递归遍历
