@@ -83,6 +83,7 @@ function postCleanEffect(effect) {
 }
 export function triggerEffect(dep) {
   for (const effect of dep.keys()) {
+    // 触发更新需要更新 effect实例标志为脏数据，重新执行 effect 函数
     if (effect._dirtyLevel === DirtyFlags.NO_DITY) {
       effect._dirtyLevel = DirtyFlags.IS_DIRTY
     }

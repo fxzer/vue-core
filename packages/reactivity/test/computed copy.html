@@ -27,31 +27,22 @@
         },
       })
       const app = document.getElementById('app')
-      
-      const address = computed({
-        get() {
-          console.log('computed get')
-          return `${state.address.province}-${state.address.city}`
-        },
-        set(newValue) {
-          console.log('computed set', newValue)
-          const arr = newValue.split('-')
-          state.address.province = arr[0]
-          state.address.city = arr[1]
-        }
+      const address = computed(() => {
+        console.log('[ computed ]-31----runner')
+        return state.address.province + '-' + state.address.city
       })
       effect(() => {
         app.innerHTML = address.value
       })
       // 依赖变化
-      // setTimeout(() => {
-      //   // state.address.city = '南京'
-      //   state.address.city = '苏州'
-      //   console.log(address.value)
-      // },1000)
       setTimeout(() => {
-        address.value = '浙江-杭州'
+        // state.address.city = '南京'
+        state.address.city = '苏州'
+        console.log(address.value)
       },1000)
+      // setTimeout(() => {
+      //   address.value = '浙江-杭州'
+      // })
       console.log(address.value)
       console.log(address.value)
       console.log(address.value)
