@@ -1,0 +1,46 @@
+{
+  "name": "@vue-core/runtime-dom",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    ".": {
+      "types": "./dist/runtime-dom.d.ts",
+      "node": {
+        "production": "./dist/runtime-dom.cjs.prod.js",
+        "development": "./dist/runtime-dom.cjs.js",
+        "default": "./index.js"
+      },
+      "module": "./dist/runtime-dom.esm-bundler.js",
+      "import": "./dist/runtime-dom.esm-bundler.js",
+      "require": "./index.js"
+    },
+    "./*": "./*"
+  },
+  "main": "index.js",
+  "module": "dist/runtime-dom.esm-bundler.js",
+  "unpkg": "dist/runtime-dom.global.js",
+  "jsdelivr": "dist/runtime-dom.global.js",
+  "types": "dist/runtime-dom.d.ts",
+  "files": [
+    "dist",
+    "index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "buildOptions": {
+    "name": "VueReactivity",
+    "formats": [
+      "esm-bundler",
+      "esm-browser",
+      "cjs",
+      "global"
+    ]
+  },
+  "dependencies": {
+    "@vue-core/shared": "workspace:^"
+  }
+}
